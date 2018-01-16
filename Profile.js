@@ -98,12 +98,6 @@ export default class Profile extends Component {
   }
 }   
 
-validateEmail = (email) => {
-  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-};
-
-
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,

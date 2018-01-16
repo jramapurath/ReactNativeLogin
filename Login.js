@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { Text, StyleSheet, View, TextInput, KeyboardAvoidingView, TouchableOpacity, AsyncStorage } from 'react-native';
 
@@ -9,7 +10,9 @@ import { Profile } from '/Users/jramapurath/AwesomeReactNat/Profile';
 
 import { validate } from '/Users/jramapurath/AwesomeReactNat/validate';
 
-export default class Login extends React.Component {
+import * as loginActions from '/Users/jramapurath/AwesomeReactNat/src/actions/loginActions.js'
+
+class Login extends React.Component {
 
   constructor(props) {
     super(props);
@@ -31,8 +34,17 @@ export default class Login extends React.Component {
     this.setState({ passwordValidationMessage: v[1] })
   }
 
+  onLoginClick = () => {
+    this.props.userLogin({
+      name: this.state.username,
+      password: this.state.password
+    })
+  }
+
   render() {
-    const { navigate } = this.props.navigation;
+    // const { navigate } = this.props.navigation;  
+    const user = this.props.user
+    // console.log('user val' + user && user.test ? user.test : 'no value')
     return (
       <KeyboardAvoidingView behavior='padding' style={styles.wrapper}>
 
@@ -45,6 +57,7 @@ export default class Login extends React.Component {
             onChangeText={this.onUserNameChange}
             underlineColorAndroid='transparent'
           />
+          <Text style={styles.header}>- {user} -</Text>
 
           <Text style={styles.red}>{this.state.usernameValidationMessage}</Text>
 
@@ -58,20 +71,16 @@ export default class Login extends React.Component {
 
           <TouchableOpacity
             style={styles.btn}
-            onPress={() =>
-              navigate('Profile')
-            } >
+            onPress={this.onLoginClick} >
 
             <Text>Log in</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{ height: 25, width: 60, borderWidth: 1, alignSelf: 'flex-end', backgroundColor: '#4286f4', marginTop: 20 }}
-            onPress={() =>
-              navigate('Profile')
-            } >
+             >
 
-            <Text>Registers</Text>
+            <Text>Register</Text>
 
           </TouchableOpacity>
 
@@ -82,12 +91,7 @@ export default class Login extends React.Component {
 
   }
 
-  // login = () => {
-  //   navigate('Profile', { name: 'Jane' })
-  // }
-
 }
-
 
 
 const styles = StyleSheet.create({
@@ -127,3 +131,24 @@ const styles = StyleSheet.create({
   },
 
 });
+
+function mapStateToProps(state, ownProps) {
+  debugger
+
+  // const username = state && state.loginReducer ? state.loginReducer.name : ''
+  // alert('username'+JSON.stringify(username))
+  console.log('state' +  state ?  JSON.stringify(state) : '')
+  console.log('loginreducer in mstp')
+  console.log('loginreducer' + state.loginReducer ? state.loginReducer.name: 'no name set')
+  return {
+    user: state.loginReducer ? state.loginReducer.name: ''
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  debugger
+  return {
+    userLogin: user => dispatch(loginActions.userLogin(user))
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
